@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.com"
+xmlns:sec="https://www.thymeleaf.org/thymeleaf-extrasspringsecurity5">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	
+    <title>Home page</title>
+  </head>
+  <body>
+ 
+ <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="/index">HOME</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link active" href="addmedi"> Medicine</a>
+      </li>
+    </ul>
+    
+   <!--  <form class="form-inline ml" th:action="@{/findMedi}" method="get">
+      <input type="text" class="form-control mr-sm-2" name="name" placeholder="Search Medicine" size="20" >
+      <button class="btn btn-outline-success my-2 my-sm-0"> Search</button>
+    </form> -->
+    
+     <form class="form-inline ml" th:action="@{/index}" method="get">
+      <input type="text" class="form-control mr-sm-2" name="name" placeholder="Search Medicine" size="20" >
+      <button class="btn btn-success my-2 my-sm-0"> Search</button>
+    </form>
+    
+    <ul class="navbar-nav ml">	
+     <li class="nav-item">
+        <a class="nav-link active" href="/">Log Out</a>
+      </li>
+    </ul>
+    
+     
+    
+    
+    
+   
+  </div>
+</nav>
+ 
+
+
+<div th:if=${session.msg}>
+	<div class="alert alert-success" role="alert" th:text="${session.msg}"></div>
+	<th:block th:text="${#session.removeAttribute('msg')}"></th:block>
+</div>
+
+<div th:if=${session.UserName}>
+	<div class="alert alert-primary" role="alert" th:text="${session.UserName}"></div>
+	<th:block th:text="${#session.removeAttribute('UserName')}"></th:block>
+</div>
+
+<div th:if=${session.msg}>
+<div class="alert alert-success" role="alert" th:text="${session.msg}">
+</div>
+
+<th:block th:text="${#session.removeAttribute('msg')}"></th:block>
+</div>
+
+<div class="container p-5">
+
+<table class="table table-striped">
+  <thead class="bg-primary text-white">
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Name</th>
+      <th scope="col">Price</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="e, itr: ${medi}">
+      <th th:text="${itr.index+1}"></th>
+      <td th:text="${e.name}"></td>
+      <td th:text="${e.price}"></td>
+<!-- 	  <td>
+	  	<input type="number" th:name="quantity"  th:value="${e.salary}" onchange="change()" th:action="@{'/index'}" />
+	  </td> -->
+    <td>
+    <a class="btn btn-sm btn-primary" th:href="@{/edit/{id}(id=${e.id})}">Edit</a>
+    <a class="btn btn-sm btn-danger"  th:href="@{/delete/{id}(id=${e.id})}">Delete</a>
+        <a class="btn btn-sm btn-outline-success"  th:href="@{/Add/{id}(id=${e.id})}">Cart</a>
+    </td>
+
+  </tbody>
+</table>
+
+<!-- <div th:if = "${totalPages > 1}">
+
+	<div class = "row col-sm-10">
+		<div class="col-sm-2">
+			Total Rows : [[${totalItems}]]
+		</div>
+		<div class = "col-sm-1"></div>
+			<span th:each="i : ${#numbers.sequence(1,totalPages)}">
+			<a th:if="${currentPage != i}" th:href="@{'/page/'+ ${i} }">[[${i}]]</a>
+			<span th:unless="${currentPage!=i}">[[${i}]]</span> &nbsp; &nbsp;
+			</span>
+		<div class = "col-sm-1">
+		
+		<a th:if="${currentPage < totalPages}" th:href="@{'/page/'+${currentPage+1}}">Next</a>
+		<span th:unless="${currentPage < totalPages}">Next</span>
+		</div>
+	</div>
+</div> -->
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+  <p th:if="${currentPage != null}">
+  		<div th:if="${currentPage == 1}">
+    <li class="page-item disabled">
+      <a class="page-link" th:href="@{'/page/'+${currentPage-1}}" tabindex="-1">Previous</a>
+    </li>
+  </div>
+  <div th:if="${currentPage > 1}">
+
+      <a class="page-link" th:href="@{'/page/'+${currentPage-1}}" tabindex="-1">Previous</a>
+  </div>
+    <li class="page-item"><a class="page-link"  th:href="@{'/page/1'}">1</a></li>
+    <li class="page-item"><a class="page-link" th:href="@{'/page/2'}">2</a></li>
+    <div th:if="${currentPage < totalPages}">
+    	<li class="page-item">
+      			<a class="page-link" th:href="@{'/page/'+${currentPage+1}}">Next</a>
+      		</li>
+    </div>
+    <div th:unless="${currentPage < totalPages}">
+    	<li class="page-item disabled">
+      			<a class="page-link" th:href="@{'/page/'+${currentPage+1}}">Next</a>
+      		</li>
+    </div>
+      
+    </li>
+  </ul>
+</nav>
+
+</div>
+  		
+   </p>
+  
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+   
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+ </body>
+</html>
+
